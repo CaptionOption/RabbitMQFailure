@@ -1,0 +1,57 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.0'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+sourceCompatibility = 14
+targetCompatibility = 14
+
+allprojects {
+
+    apply plugin: 'idea'
+
+    // If for some reason you ever actually want javadoc, enable this
+    tasks.withType(Javadoc).all { enabled = false }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+    compile.exclude module: "tomcat-jdbc"
+}
+
+project.ext {
+    artifactName = 'RabbitExample'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Spring Boot
+    compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-amqp")
+    compile("com.rabbitmq:amqp-client:5.10.0")
+    testImplementation("org.springframework.amqp:spring-rabbit-test")
+
+    compile "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testCompile("junit:junit:4.12")
+
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
